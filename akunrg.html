@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Reiga Akun</title>
+<style>
+  :root{
+    --bg:#000000; --panel:#0b0f16; --panel-2:#11161f; --line:#1c2331;
+    --blue:#2f7dff; --blue-light:#6fa8ff; --blue-glow:rgba(47,125,255,0.55);
+    --text:#eaf0fb; --text-dim:#7c8aa3; --danger:#ff5d6c; --green:#3ddc84;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{ margin:0; padding:0; min-height:100%; background:var(--bg);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; color:var(--text); }
+  .wrap{ max-width:480px; margin:0 auto; padding:28px 18px 60px; }
+  .header{ text-align:center; margin-bottom:22px; }
+  .header .logo{ font-size:36px; filter:drop-shadow(0 0 8px rgba(111,168,255,0.6)); }
+  .header h1{ font-size:18px; letter-spacing:2px; text-transform:uppercase; margin:10px 0 4px; }
+  .header p{ font-size:12px; color:var(--text-dim); margin:0; letter-spacing:.5px; }
+
+  .box{
+    background:linear-gradient(160deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:22px; padding:22px;
+    box-shadow:0 0 30px rgba(47,125,255,0.06);
+  }
+  .list-title{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .box-title{ font-size:14px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--blue-light); }
+  .count-pill{ font-size:11px; color:var(--blue-light); background:rgba(47,125,255,0.12); border:1px solid rgba(111,168,255,0.3); border-radius:10px; padding:4px 10px; }
+
+  .acc-item{ display:flex; align-items:flex-start; gap:14px; padding:16px; border-radius:16px; border:1px solid var(--line); background:var(--bg); margin-bottom:10px; }
+  .acc-item:last-child{ margin-bottom:0; }
+  .acc-num{
+    font-size:13px; font-weight:800; color:var(--blue-light);
+    width:32px; height:32px; border-radius:10px; flex-shrink:0;
+    background:rgba(47,125,255,0.12); border:1px solid rgba(111,168,255,0.3);
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .acc-info{ flex:1; min-width:0; }
+  .acc-row{ display:flex; gap:6px; font-size:13px; margin-bottom:4px; }
+  .acc-row:last-child{ margin-bottom:0; }
+  .acc-label{ color:var(--text-dim); flex-shrink:0; }
+  .acc-value{ color:var(--text); font-weight:700; word-break:break-all; }
+  .acc-row.pass .acc-value{ color:var(--blue-light); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:600; }
+  .acc-row.made .acc-value{ color:var(--text-dim); font-weight:500; }
+  .empty{ text-align:center; color:var(--text-dim); font-size:13px; padding:30px 0; }
+  .note{ font-size:11px; color:var(--text-dim); text-align:center; line-height:1.6; margin-top:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="logo">🗂️</div>
+    <h1>Reiga &middot; Penyimpanan Akun</h1>
+    <p>Daftar akun yang terdaftar dari Reiga Universal</p>
+  </div>
+
+  <div class="box">
+    <div class="list-title">
+      <div class="box-title">Daftar Akun</div>
+      <div class="count-pill" id="countPill">0 akun</div>
+    </div>
+    <div id="accList"></div>
+  </div>
+
+  <div class="note">Halaman ini menampilkan akun yang didaftarkan lewat menu Akun di aplikasi Reiga Universal. Data disimpan di penyimpanan browser perangkat ini.</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = 'reiga_akunrg_accounts';
+  var BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+  function loadAccounts(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch(e){ return []; }
+  }
+  function saveAccounts(list){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e){}
+  }
+  function formatTanggal(iso){
+    var d = iso ? new Date(iso) : new Date();
+    if(isNaN(d.getTime())) d = new Date();
+    return d.getDate() + ' ' + BULAN_ID[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  var accounts = loadAccounts();
+
+  // Terima akun baru lewat parameter URL (?u=username&p=password&d=ISODate),
+  // dikirim otomatis oleh index.html saat ada pendaftaran akun baru.
+  function ingestFromQuery(){
+    try{
+      var params = new URLSearchParams(window.location.search);
+      var u = params.get('u');
+      var p = params.get('p');
+      var d = params.get('d');
+      if(!u || !p) return;
+      var exists = accounts.filter(function(a){ return a.username.toLowerCase() === u.toLowerCase(); })[0];
+      if(exists){
+        exists.password = p;
+        exists.createdAt = d || exists.createdAt;
+      } else {
+        accounts.push({ username: u, password: p, createdAt: d || new Date().toISOString() });
+      }
+      saveAccounts(accounts);
+    } catch(e){}
+  }
+
+  function render(){
+    var list = document.getElementById('accList');
+    var countPill = document.getElementById('countPill');
+    countPill.textContent = accounts.length + ' akun';
+    list.innerHTML = '';
+    if(accounts.length === 0){
+      list.innerHTML = '<div class="empty">Belum ada akun yang terdaftar.</div>';
+      return;
+    }
+    accounts.forEach(function(acc, i){
+      var row = document.createElement('div');
+      row.className = 'acc-item';
+      row.innerHTML =
+        '<div class="acc-num">' + String(i+1).padStart(2,'0') + '</div>' +
+        '<div class="acc-info">' +
+          '<div class="acc-row"><span class="acc-label">Username:</span><span class="acc-value"></span></div>' +
+          '<div class="acc-row pass"><span class="acc-label">Password:</span><span class="acc-value"></span></div>' +
+          '<div class="acc-row made"><span class="acc-label">Dibuat:</span><span class="acc-value"></span></div>' +
+        '</div>';
+      var values = row.querySelectorAll('.acc-value');
+      values[0].textContent = acc.username;
+      values[1].textContent = acc.password;
+      values[2].textContent = formatTanggal(acc.createdAt);
+      list.appendChild(row);
+    });
+  }
+
+  ingestFromQuery();
+  render();
+})();
+</script>
+</body>
+</html>
