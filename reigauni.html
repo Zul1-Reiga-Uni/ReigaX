@@ -316,6 +316,73 @@
   .developer-actions{ display:flex; gap:8px; flex-wrap:wrap; }
   .developer-actions .pill-btn{ margin-top:0; flex:1; min-width:130px; }
   .developer-status{ min-height:18px; color:var(--green); font-size:12px; }
+  .dev-account-list{ width:100%; max-width:520px; display:flex; flex-direction:column; gap:10px; }
+  .dev-account-item{ display:flex; align-items:center; gap:14px; padding:16px; border-radius:16px; border:1px solid var(--line); background:var(--panel-2); }
+  .dev-account-item .acc-num{
+    font-size:13px; font-weight:800; color:var(--blue-light);
+    width:32px; height:32px; border-radius:10px; flex-shrink:0;
+    background:rgba(47,125,255,0.12); border:1px solid rgba(111,168,255,0.3);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dev-account-item .acc-info{ flex:1; min-width:0; }
+  .dev-account-item .acc-row{ display:flex; gap:6px; font-size:13px; margin-bottom:3px; }
+  .dev-account-item .acc-row:last-child{ margin-bottom:0; }
+  .dev-account-item .acc-label{ color:var(--text-dim); flex-shrink:0; }
+  .dev-account-item .acc-value{ color:var(--text); font-weight:700; word-break:break-all; }
+  .dev-account-item .acc-row.pass .acc-value{ color:var(--blue-light); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:600; }
+  .dev-account-item .acc-row.made .acc-value{ color:var(--text-dim); font-weight:500; }
+  .dev-account-empty{ color:var(--text-dim); font-size:13px; text-align:center; padding:30px 0; }
+
+  /* ================= LOGIN / DAFTAR AKUN ================= */
+  .auth-box{
+    width:min(320px, 88vw); aspect-ratio:1/1; max-width:320px;
+    display:flex; flex-direction:column; justify-content:center; gap:14px;
+    padding:28px; border-radius:24px; border:1px solid var(--line);
+    background:linear-gradient(160deg, var(--panel-2), var(--panel));
+    box-shadow:0 0 30px rgba(47,125,255,0.08);
+    margin:24px auto 0;
+  }
+  .auth-title{ text-align:center; font-size:20px; font-weight:800; color:var(--text); letter-spacing:1px; margin-bottom:4px; }
+  .auth-field{ display:flex; flex-direction:column; gap:6px; }
+  .auth-field label{ font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+  .auth-field input{
+    background:var(--bg); border:1px solid var(--line); border-radius:12px;
+    color:var(--text); font-size:15px; padding:12px 14px; width:100%;
+  }
+  .auth-field input:focus{ outline:none; border-color:var(--blue); }
+  .auth-submit{
+    margin-top:6px; padding:13px 0; border-radius:14px; border:none;
+    background:linear-gradient(160deg, var(--blue-light), var(--blue));
+    color:#fff; font-weight:700; font-size:15px;
+  }
+  .auth-submit:active{ transform:scale(.97); }
+  .auth-status{ min-height:16px; text-align:center; font-size:12px; }
+  .auth-status.error{ color:var(--danger); }
+  .auth-status.success{ color:var(--green); }
+  .auth-switch{ text-align:center; font-size:13px; color:var(--text-dim); margin-top:18px; }
+  .auth-switch a{ color:var(--blue-light); font-weight:700; text-decoration:none; }
+  .auth-switch a:active{ opacity:.7; }
+
+  /* ================= UANG (KALKULATOR TABUNGAN) ================= */
+  .uang-box{ width:100%; max-width:340px; display:flex; flex-direction:column; gap:16px; margin-top:6px; }
+  .uang-field label{ font-size:12px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; display:block; }
+  .uang-input{
+    width:100%; background:var(--panel-2); border:1px solid var(--line); border-radius:14px;
+    color:var(--text); font-size:22px; padding:14px 16px; text-align:center;
+  }
+  .uang-input:focus{ outline:none; border-color:var(--blue); }
+  .uang-period-select{ display:flex; gap:10px; }
+  .uang-period-btn{
+    flex:1; padding:12px 0; border-radius:14px; border:1px solid var(--line);
+    background:var(--panel-2); color:var(--text); font-size:14px; font-weight:700;
+  }
+  .uang-period-btn.active{ background:linear-gradient(160deg, var(--blue-light), var(--blue)); color:#fff; border-color:transparent; box-shadow:0 0 14px var(--blue-glow); }
+  .uang-period-btn:active{ transform:scale(.96); }
+  .uang-result{ width:100%; max-width:340px; margin-top:8px; display:flex; flex-direction:column; gap:10px; }
+  .uang-result-row{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-radius:14px; background:var(--panel-2); border:1px solid var(--line); }
+  .uang-result-row .label{ font-size:12px; color:var(--text-dim); letter-spacing:.5px; }
+  .uang-result-row .value{ font-size:16px; font-weight:800; color:var(--blue-light); font-variant-numeric:tabular-nums; }
+  .uang-result-row.highlight{ border-color:rgba(111,168,255,0.5); background:rgba(47,125,255,0.1); }
 
   /* ================= UNO FLIP ================= */
   .uno-player-select{ display:flex; gap:12px; }
@@ -434,15 +501,15 @@
       <div class="developer-hero">
         <div class="developer-hero-title">DEVELOPER</div>
         <div class="developer-hero-sub">You Are Developer</div>
-        <div class="developer-note">Mode pengujian aktif. Pilih menu untuk mencoba modul, atau buka Editor Script untuk mengubah perilaku aplikasi langsung dari halaman ini.</div>
+        <div class="developer-note">Mode pengujian aktif. Pilih menu untuk mencoba modul, atau buka Konsol Script untuk menjalankan potongan JS langsung ke aplikasi yang sedang berjalan (tidak mengubah file asli).</div>
       </div>
       <div class="developer-list" id="developerList"></div>
       <div class="developer-editor" id="developerEditor">
-        <div class="topbar-title">Editor Script Runtime</div>
+        <div class="topbar-title">Konsol Script Developer</div>
         <textarea class="developer-code" id="developerCode" spellcheck="false"></textarea>
         <div class="developer-actions">
-          <button class="pill-btn" id="developerApply">Terapkan &amp; Muat Ulang</button>
-          <button class="pill-btn" id="developerLoad">Muat HTML Saat Ini</button>
+          <button class="pill-btn" id="developerApply">Jalankan</button>
+          <button class="pill-btn" id="developerToggleView">Lihat Kode Bagian Developer</button>
           <button class="pill-btn" id="developerReset">Reset</button>
           <button class="pill-btn" id="developerClose">Tutup Editor</button>
         </div>
@@ -577,14 +644,14 @@
     </div>
   </div>
 
-  <!-- ============ KUIS MATEMATIKA SMP KELAS 9 ============ -->
+  <!-- ============ KUIS MATEMATIKA SMP ============ -->
   <div class="screen" id="screen-matematika">
     <div class="topbar">
       <button class="backBtn" data-back="home">&#8592;</button>
       <div class="topbar-title">Matematika Kelas 9</div>
     </div>
     <div class="center-col">
-      <div class="academic-badge">SMP KELAS 9 · PILIHAN GANDA</div>
+      <div class="academic-badge">SMP · PILIHAN GANDA</div>
       <div class="kuis-stats">
         <div>Skor: <b id="mathScoreVal">0</b>/<span id="mathTotalVal">0</span></div>
         <div>Beruntun: <b id="mathStreakVal">0</b></div>
@@ -596,14 +663,14 @@
     </div>
   </div>
 
-  <!-- ============ KUIS INFORMATIKA SMP KELAS 9 ============ -->
+  <!-- ============ KUIS INFORMATIKA SMP ============ -->
   <div class="screen" id="screen-informatika">
     <div class="topbar">
       <button class="backBtn" data-back="home">&#8592;</button>
       <div class="topbar-title">Informatika Kelas 9</div>
     </div>
     <div class="center-col">
-      <div class="academic-badge">SMP KELAS 9 · KOMPUTER & SMARTPHONE</div>
+      <div class="academic-badge">SMP · KOMPUTER & SMARTPHONE</div>
       <div class="kuis-stats">
         <div>Skor: <b id="infoScoreVal">0</b>/<span id="infoTotalVal">0</span></div>
         <div>Beruntun: <b id="infoStreakVal">0</b></div>
@@ -646,8 +713,8 @@
 
       <div class="uno-pass-gate" id="unoPassGate">
         <div class="uno-pass-title">Pemain <span id="unoPassLabel">1</span></div>
-        <div class="uno-pass-sub">Oper HP, pastikan pemain lain tidak melihat layar</div>
-        <button class="pill-btn" id="unoPassBtn">Lihat Kartu Saya</button>
+        <div class="uno-pass-sub">Oper Hape, pastikan pemain lain tidak melihat layar</div>
+        <button class="pill-btn" id="unoPassBtn">Lihat Kartu</button>
       </div>
 
       <div class="uno-board" id="unoBoard">
@@ -655,6 +722,101 @@
         <div class="uno-actions">
           <button class="pill-btn" id="unoPassTurnBtn">Selesai Giliran</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LOGIN ============ -->
+  <div class="screen" id="screen-login">
+    <div class="topbar">
+      <div class="topbar-title">Akun</div>
+    </div>
+    <div class="center-col">
+      <div class="auth-box">
+        <div class="auth-title">Login</div>
+        <div class="auth-field">
+          <label>Username</label>
+          <input type="text" id="loginUsername" autocomplete="off" placeholder="Masukkan username">
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="loginPassword" autocomplete="off" placeholder="Masukkan password">
+        </div>
+        <button class="auth-submit" id="loginSubmit">Login</button>
+        <div class="auth-status" id="loginStatus">&nbsp;</div>
+      </div>
+      <div class="auth-switch">Belum punya akun? <a id="goToRegister" href="javascript:void(0)">Daftar Akun</a></div>
+      <div class="auth-switch"><a href="https://zul1-reiga-uni.github.io/ReigaX/akunrg.html" target="_blank" rel="noopener">Kelola Akun Online &#8599;</a></div>
+    </div>
+  </div>
+
+  <!-- ============ DAFTAR AKUN ============ -->
+  <div class="screen" id="screen-register">
+    <div class="topbar">
+      <button class="backBtn" data-back="login">&#8592;</button>
+      <div class="topbar-title">Daftar Akun</div>
+    </div>
+    <div class="center-col">
+      <div class="auth-box">
+        <div class="auth-title">Daftar Akun</div>
+        <div class="auth-field">
+          <label>Username</label>
+          <input type="text" id="registerUsername" autocomplete="off" placeholder="Buat username">
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="registerPassword" autocomplete="off" placeholder="Buat password">
+        </div>
+        <button class="auth-submit" id="registerSubmit">Save</button>
+        <div class="auth-status" id="registerStatus">&nbsp;</div>
+      </div>
+      <div class="auth-switch">Sudah punya akun? <a id="goToLogin" href="javascript:void(0)">Login</a></div>
+    </div>
+  </div>
+
+  <!-- ============ DEVELOPER: USER ACCOUNT ============ -->
+  <div class="screen" id="screen-dev-accounts">
+    <div class="topbar">
+      <button class="backBtn" data-back="developer">&#8592;</button>
+      <div class="topbar-title">User Account</div>
+    </div>
+    <div class="center-col">
+      <div class="developer-note" style="max-width:520px;">Semua akun yang pernah didaftarkan lewat menu Akun, tersimpan di sini (1 folder yang sama).</div>
+      <div class="dev-account-list" id="devAccountList"></div>
+      <div class="auth-switch" style="margin-top:16px;"><a href="https://zul1-reiga-uni.github.io/ReigaX/akunrg.html" target="_blank" rel="noopener">Buka Penyimpanan Akun Online &#8599;</a></div>
+    </div>
+  </div>
+
+  <!-- ============ UANG (KALKULATOR TABUNGAN) ============ -->
+  <div class="screen" id="screen-uang">
+    <div class="topbar">
+      <button class="backBtn" data-back="home">&#8592;</button>
+      <div class="topbar-title">Uang</div>
+    </div>
+    <div class="center-col">
+      <div class="uang-box">
+        <div class="uang-field">
+          <label>Uang</label>
+          <input type="number" inputmode="numeric" class="uang-input" id="uangAmount" placeholder="0">
+        </div>
+        <div class="uang-field">
+          <label>Berapa</label>
+          <input type="number" inputmode="numeric" class="uang-input" id="uangBerapa" placeholder="0">
+        </div>
+        <div class="uang-field">
+          <label>Pilih</label>
+          <div class="uang-period-select" id="uangPeriodSelect">
+            <button class="uang-period-btn active" data-period="hari">Hari</button>
+            <button class="uang-period-btn" data-period="bulan">Bulan</button>
+            <button class="uang-period-btn" data-period="tahun">Tahun</button>
+          </div>
+        </div>
+      </div>
+      <div class="uang-field" style="width:100%; max-width:340px; margin-top:10px;">
+        <label>Hasil</label>
+      </div>
+      <div class="uang-result">
+        <div class="uang-result-row highlight"><span class="label" id="uangHasilLabel">Uang × 0 Hari</span><span class="value" id="uangHasilVal">Rp0</span></div>
       </div>
     </div>
   </div>
@@ -710,11 +872,12 @@
 (function(){
   "use strict";
 
+  // Simpan sumber script saat ini (untuk fitur "Lihat Kode" di Mode Developer -
+  // hanya menampilkan potongan Bagian Developer, bukan seluruh file)
+  var __OWN_SCRIPT_SOURCE__ = (document.currentScript && document.currentScript.textContent) || '';
+
   /* =========================================================
-     BAGIAN 1 — LOADING SCREEN DENGAN PROGRESS ASLI (BUKAN PAJANGAN)
-     Progress dihitung dari jumlah tugas nyata yang benar-benar
-     dieksekusi: membangun DOM menu utama, tombol kalkulator,
-     papan XO, papan catur, dan self-test tiap modul.
+     Load Svreen
   ========================================================= */
 
   var ringEl = document.getElementById('ringProgress');
@@ -745,7 +908,7 @@
 
   /* -------- Navigasi antar layar -------- */
   var screens = {};
-  ['home','developer','calculator','ttt','guess','catur','cacing','kamus','kuis','matematika','informatika','uno-setup','uno'].forEach(function(id){
+  ['home','developer','dev-accounts','calculator','ttt','guess','catur','cacing','kamus','kuis','matematika','informatika','uno-setup','uno','login','register','uang'].forEach(function(id){
     screens[id] = document.getElementById('screen-'+id);
   });
   var __prevScreen = 'home';
@@ -753,28 +916,32 @@
     if(__prevScreen==='cacing' && id!=='cacing' && typeof snakeStop==='function') snakeStop();
     Object.keys(screens).forEach(function(k){ screens[k].classList.toggle('show', k===id); });
     if(id==='kamus' && typeof kamusOpenWithLoading==='function') kamusOpenWithLoading();
+    if(id==='dev-accounts' && typeof renderDevAccounts==='function') renderDevAccounts();
     __prevScreen = id;
   }
   document.querySelectorAll('[data-back]').forEach(function(btn){
     btn.addEventListener('click', function(){ showScreen(btn.dataset.back); });
   });
 
-  /* -------- Data menu utama (flat, tanpa folder/submenu) -------- */
+  /* -------- Data menu utama-------- */
   var homeItems = [
-    {icon:'🧮', title:'Kalkulator', sub:'Hitung cepat & akurat', go:'calculator'},
-    {icon:'❌', title:'Tic-Tac-Toe (XO)', sub:'2 pemain bergantian', go:'ttt'},
-    {icon:'🔢', title:'Tebak Angka', sub:'Tebak 1 sampai 100', go:'guess'},
-    {icon:'♟️', title:'Catur', sub:'Catur klasik 2 pemain', go:'catur'},
-    {icon:'🐛', title:'Cacing', sub:'Cacing mukbang, makan terus!', go:'cacing'},
-    {icon:'📖', title:'Kamus Inggris', sub:'Inggris-Indonesia + V1 V2 V3', go:'kamus'},
-    {icon:'🇬🇧', title:'Kuis Bahasa Inggris', sub:'Soal acak A/B/C/D tanpa batas', go:'kuis'},
-    {icon:'📐', title:'Matematika Kelas 9', sub:'Latihan SMP pilihan ganda', go:'matematika'},
-    {icon:'💻', title:'Informatika Kelas 9', sub:'PC, laptop, software & hardware', go:'informatika'},
-    {icon:'🃏', title:'UNO Flip', sub:'2-5 pemain, gantian HP', go:'uno-setup'}
+    {icon:'🧮', title:'Kalkulator', sub:'Memghitung', go:'calculator'},
+    {icon:'❌', title:'Tic Tac X0', sub:'Permainan X0 1:1', go:'ttt'},
+    {icon:'🔢', title:'Tebak Angka', sub:'Tebak Angka 1-100', go:'guess'},
+    {icon:'♟️', title:'Catur', sub:'Catur 2 Pemain', go:'catur'},
+    {icon:'🐛', title:'Cacing', sub:'Cacing', go:'cacing'},
+    {icon:'📖', title:'Kamus B.Inggris', sub:'Inggris-Indonesia + V1 V2 V3', go:'kamus'},
+    {icon:'🇬🇧', title:'Kuis B.Inggris', sub:'Soal B.Inggris Acak', go:'kuis'},
+    {icon:'📐', title:'MTK', sub:'Latihan MTK', go:'matematika'},
+    {icon:'💻', title:'INFORMATIKA', sub:'Komputer/Smartphone', go:'informatika'},
+    {icon:'🃏', title:'UNO', sub:'Uno Flip', go:'uno-setup'},
+    {icon:'💰', title:'Uang', sub:'Hitung uang berdasarkan hari/bulan/tahun', go:'uang'}
   ];
 
   var developerItems = [{
-    title:'Editor Script', sub:'Edit seluruh HTML dan terapkan langsung', go:'editor', icon:'🛠️'
+    title:'Konsol Script', sub:'Jalankan potongan JS ke app yang aktif (aman, tanpa ubah file)', go:'editor', icon:'🛠️'
+  }, {
+    title:'User Account', sub:'Semua akun terdaftar (folder akun)', go:'dev-accounts', icon:'👤'
   }].concat(homeItems.map(function(item){
     return {
       title:item.title,
@@ -900,7 +1067,7 @@
   }
 
   /* -------- Tahapan sistem tambahan -------- */
-  var SYSTEM_STEPS = ['font','engine1','engine2','engine3','guess-init','chess-init','snake-init','dict-init','quiz-init','math-init','info-init','developer-init','uno-init','bind','finalize'];
+  var SYSTEM_STEPS = ['font','engine1','engine2','engine3','guess-init','chess-init','snake-init','dict-init','quiz-init','math-init','info-init','developer-init','auth-init','uang-init','uno-init','bind','finalize'];
 
   totalSteps = homeItems.length + keyDefs.length + 9 + 64 + SYSTEM_STEPS.length;
 
@@ -930,8 +1097,10 @@
       statusEl.textContent = 'Menyiapkan game Cacing';
       work = Promise.resolve(initSnake());
     } else if(key==='dict-init'){
-       statusEl.textContent = 'Memuat kamus (25000+ kata)';
-      work = Promise.resolve(initKamus());
+      work = Promise.resolve(initKamus()).then(function(){
+        statusEl.textContent = 'Kamus dimuat (' + DICT.length + ' kata)';
+        return true;
+      });
     } else if(key==='quiz-init'){
       statusEl.textContent = 'Menyiapkan kuis Bahasa Inggris';
       work = Promise.resolve(initQuiz());
@@ -944,6 +1113,12 @@
     } else if(key==='developer-init'){
       statusEl.textContent = 'Menyiapkan mode developer';
       work = Promise.resolve(initDeveloperMode());
+    } else if(key==='auth-init'){
+      statusEl.textContent = 'Menyiapkan sistem akun';
+      work = Promise.resolve(initAuth());
+    } else if(key==='uang-init'){
+      statusEl.textContent = 'Menyiapkan kalkulator Uang';
+      work = Promise.resolve(initUang());
     } else if(key==='uno-init'){
       statusEl.textContent = 'Menyiapkan UNO Flip';
       work = Promise.resolve(initUno());
@@ -967,7 +1142,7 @@
       developerModePending = false;
       showScreen('developer');
     } else {
-      showScreen('home');
+      showScreen('login');
     }
     setTimeout(function(){ loadingEl.style.display='none'; }, 550);
   });
@@ -3825,6 +4000,7 @@
      BAGIAN 8C — MODE DEVELOPER
      Kode rahasia kalkulator: 1236745 + 5
   ========================================================= */
+  /* @@DEV_SECTION_START@@ */
   var DEV_CODE = '1236745+5';
   var developerDefaultCode =
     "/* Script runtime Reiga Universal */\n" +
@@ -3861,51 +4037,80 @@
     el.textContent = text;
     el.style.color = isError ? 'var(--danger)' : 'var(--green)';
   }
-  function developerCurrentHtml(){
-    return '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  }
-  function developerLoadHtml(){
-    var codeEl = document.getElementById('developerCode');
-    if(!codeEl) return;
-    codeEl.value = developerCurrentHtml();
-    developerSetStatus('Seluruh HTML halaman sudah dimuat ke editor.');
-  }
-  function developerApply(){
-    var codeEl = document.getElementById('developerCode');
-    if(!codeEl) return;
-    var source = codeEl.value.trim();
-    if(!source){
-      developerSetStatus('HTML tidak boleh kosong.', true);
-      return;
+  // Hanya mengambil potongan kode BAGIAN DEVELOPER saja dari sumber script,
+  // BUKAN seluruh file - supaya bagian utama aplikasi tidak ikut tertampil/tertimpa.
+  function developerSectionSource(){
+    var src = __OWN_SCRIPT_SOURCE__;
+    if(!src) return '// (sumber script tidak tersedia di lingkungan ini)';
+    // Tag digabung dari potongan string supaya literal utuhnya TIDAK muncul di
+    // source function ini sendiri (mencegah indexOf salah menemukan baris ini duluan)
+    var startTag = '@@DEV_SEC' + 'TION_START@@';
+    var endTag = '@@DEV_SEC' + 'TION_END@@';
+    var startIdx = src.indexOf(startTag);
+    var endIdx = src.indexOf(endTag);
+    if(startIdx === -1 || endIdx === -1 || endIdx <= startIdx){
+      return '// (bagian developer tidak ditemukan)';
     }
-    if(!/<html[\s>]/i.test(source) || !/<script[\s>]/i.test(source)){
-      developerSetStatus('Editor ini menerima seluruh HTML, termasuk tag <html> dan <script>.', true);
+    startIdx += startTag.length;
+    return src.slice(startIdx, endIdx).trim();
+  }
+  var developerConsoleMode = 'run'; // 'run' = konsol jalankan snippet, 'view' = lihat kode bagian developer (readonly)
+  function developerShowRunMode(){
+    developerConsoleMode = 'run';
+    var codeEl = document.getElementById('developerCode');
+    if(codeEl){
+      codeEl.readOnly = false;
+      codeEl.value = developerDefaultCode;
+    }
+    var toggleBtn = document.getElementById('developerToggleView');
+    if(toggleBtn) toggleBtn.textContent = 'Lihat Kode Bagian Developer';
+    var applyBtn = document.getElementById('developerApply');
+    if(applyBtn) applyBtn.style.display = '';
+    developerSetStatus('Konsol siap. Tulis potongan JS lalu tekan Jalankan (memakai objek app.*, tidak mengubah file).');
+  }
+  function developerShowViewMode(){
+    developerConsoleMode = 'view';
+    var codeEl = document.getElementById('developerCode');
+    if(codeEl){
+      codeEl.value = developerSectionSource();
+      codeEl.readOnly = true;
+    }
+    var toggleBtn = document.getElementById('developerToggleView');
+    if(toggleBtn) toggleBtn.textContent = 'Kembali ke Konsol';
+    var applyBtn = document.getElementById('developerApply');
+    if(applyBtn) applyBtn.style.display = 'none';
+    developerSetStatus('Menampilkan kode Bagian Developer saja (mode baca).');
+  }
+  function developerRunSnippet(){
+    var codeEl = document.getElementById('developerCode');
+    if(!codeEl) return;
+    var code = codeEl.value;
+    if(!code.trim()){
+      developerSetStatus('Kode kosong, tulis sesuatu dulu.', true);
       return;
     }
     try{
-      localStorage.setItem('reigaDeveloperHtml', source);
-      developerSetStatus('HTML tersimpan. Halaman sedang dimuat ulang...');
-      setTimeout(function(){
-        document.open();
-        document.write(source);
-        document.close();
-      }, 120);
+      var fn = new Function('app', code);
+      fn(developerApi());
+      developerSetStatus('Kode berhasil dijalankan.');
     } catch(err){
-      developerSetStatus('HTML gagal diterapkan: ' + err.message, true);
+      developerSetStatus('Error: ' + err.message, true);
     }
   }
   function initDeveloperMode(){
     buildDeveloperList();
     var codeEl = document.getElementById('developerCode');
-    if(codeEl){
-      codeEl.value = localStorage.getItem('reigaDeveloperHtml') || developerCurrentHtml();
-      document.getElementById('developerApply').addEventListener('click', developerApply);
-      document.getElementById('developerLoad').addEventListener('click', developerLoadHtml);
+    if(codeEl && !codeEl.dataset.bound){
+      codeEl.dataset.bound = '1';
+      developerShowRunMode();
+      document.getElementById('developerApply').addEventListener('click', developerRunSnippet);
+      document.getElementById('developerToggleView').addEventListener('click', function(){
+        if(developerConsoleMode === 'run') developerShowViewMode();
+        else developerShowRunMode();
+      });
       document.getElementById('developerReset').addEventListener('click', function(){
-        codeEl.value = developerCurrentHtml();
-        localStorage.removeItem('reigaDeveloperHtml');
-        localStorage.removeItem('reigaDeveloperScript');
-        developerSetStatus('HTML editor dikembalikan ke versi halaman saat ini.');
+        if(developerConsoleMode === 'view') developerShowViewMode();
+        else developerShowRunMode();
       });
       document.getElementById('developerClose').addEventListener('click', function(){
         document.getElementById('developerEditor').classList.remove('show');
@@ -3933,6 +4138,163 @@
     }
     buildDeveloperList();
   }
+
+  /* =========================================================
+     BAGIAN 8D — SISTEM AKUN (Login / Daftar) + tampilan di Developer Mode
+     Semua akun disimpan bersama di satu array in-memory ("1 folder"),
+     dan bisa dilihat lewat menu "User Account" di Mode Developer.
+  ========================================================= */
+  var accountsFolder = []; // { username, password }
+
+  var BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  function formatTanggalAkun(iso){
+    var d = iso ? new Date(iso) : new Date();
+    if(isNaN(d.getTime())) d = new Date();
+    return d.getDate() + ' ' + BULAN_ID[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function renderDevAccounts(){
+    var list = document.getElementById('devAccountList');
+    if(!list) return;
+    list.innerHTML = '';
+    if(accountsFolder.length === 0){
+      list.innerHTML = '<div class="dev-account-empty">Belum ada akun yang terdaftar.</div>';
+      return;
+    }
+    accountsFolder.forEach(function(acc, i){
+      var row = document.createElement('div');
+      row.className = 'dev-account-item';
+      row.innerHTML =
+        '<div class="acc-num">' + String(i+1).padStart(2,'0') + '</div>' +
+        '<div class="acc-info">' +
+          '<div class="acc-row"><span class="acc-label">Username:</span><span class="acc-value">' + acc.username + '</span></div>' +
+          '<div class="acc-row pass"><span class="acc-label">Password:</span><span class="acc-value">' + acc.password + '</span></div>' +
+          '<div class="acc-row made"><span class="acc-label">Dibuat:</span><span class="acc-value">' + formatTanggalAkun(acc.createdAt) + '</span></div>' +
+        '</div>';
+      list.appendChild(row);
+    });
+  }
+
+  function authSetStatus(elId, text, kind){
+    var el = document.getElementById(elId);
+    if(!el) return;
+    el.textContent = text;
+    el.className = 'auth-status' + (kind ? ' ' + kind : '');
+  }
+
+  function doLogin(){
+    var u = document.getElementById('loginUsername').value.trim();
+    var p = document.getElementById('loginPassword').value;
+    if(!u || !p){
+      authSetStatus('loginStatus', 'Username dan password wajib diisi.', 'error');
+      return;
+    }
+    var found = accountsFolder.filter(function(a){ return a.username === u && a.password === p; })[0];
+    if(!found){
+      authSetStatus('loginStatus', 'Username atau password salah.', 'error');
+      return;
+    }
+    authSetStatus('loginStatus', 'Login berhasil! Halo, ' + u + '.', 'success');
+    setTimeout(function(){ showScreen('home'); }, 500);
+  }
+
+  var AKUNRG_URL = 'https://zul1-reiga-uni.github.io/ReigaX/akunrg.html';
+
+  function syncAccountToAkunrg(account){
+    // Kirim data akun ke akunrg.html lewat parameter URL memakai iframe
+    // tersembunyi, supaya akun yang baru daftar otomatis muncul di sana
+    // (butuh koneksi internet; akunrg.html menyimpannya di localStorage-nya sendiri).
+    try{
+      var url = AKUNRG_URL + '?u=' + encodeURIComponent(account.username) +
+        '&p=' + encodeURIComponent(account.password) +
+        '&d=' + encodeURIComponent(account.createdAt);
+      var frame = document.createElement('iframe');
+      frame.style.display = 'none';
+      frame.src = url;
+      document.body.appendChild(frame);
+      setTimeout(function(){ if(frame.parentNode) frame.parentNode.removeChild(frame); }, 8000);
+    } catch(e){ /* diam-diam gagal jika offline, akun tetap tersimpan lokal di app */ }
+  }
+
+  function doRegister(){
+    var u = document.getElementById('registerUsername').value.trim();
+    var p = document.getElementById('registerPassword').value;
+    if(!u || !p){
+      authSetStatus('registerStatus', 'Username dan password wajib diisi.', 'error');
+      return;
+    }
+    var exists = accountsFolder.filter(function(a){ return a.username === u; })[0];
+    if(exists){
+      authSetStatus('registerStatus', 'Username sudah dipakai, coba yang lain.', 'error');
+      return;
+    }
+    var newAccount = {username:u, password:p, createdAt: new Date().toISOString()};
+    accountsFolder.push(newAccount);
+    syncAccountToAkunrg(newAccount);
+    renderDevAccounts();
+    authSetStatus('registerStatus', 'Akun tersimpan! Mengarahkan ke Login...', 'success');
+    document.getElementById('registerUsername').value = '';
+    document.getElementById('registerPassword').value = '';
+    setTimeout(function(){ showScreen('login'); }, 600);
+  }
+
+  function initAuth(){
+    document.getElementById('loginSubmit').addEventListener('click', doLogin);
+    document.getElementById('registerSubmit').addEventListener('click', doRegister);
+    document.getElementById('goToRegister').addEventListener('click', function(){ showScreen('register'); });
+    document.getElementById('goToLogin').addEventListener('click', function(){ showScreen('login'); });
+    ['loginUsername','loginPassword'].forEach(function(id){
+      document.getElementById(id).addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+    });
+    ['registerUsername','registerPassword'].forEach(function(id){
+      document.getElementById(id).addEventListener('keydown', function(e){ if(e.key==='Enter') doRegister(); });
+    });
+    renderDevAccounts();
+    return true;
+  }
+
+  /* =========================================================
+     BAGIAN 8E — UANG (kalkulator hitung uang harian/bulanan/tahunan)
+  ========================================================= */
+  var uangPeriod = 'hari';
+
+  function formatRupiah(n){
+    if(!isFinite(n)) n = 0;
+    var neg = n < 0;
+    n = Math.round(Math.abs(n));
+    var s = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return (neg ? '-Rp' : 'Rp') + s;
+  }
+
+  function uangRecalculate(){
+    var amount = parseFloat(document.getElementById('uangAmount').value) || 0;
+    var berapa = parseFloat(document.getElementById('uangBerapa').value) || 0;
+    // "Uang" dianggap sebagai nilai per HARI. Memilih Bulan/Tahun akan
+    // mengonversi "Berapa" menjadi jumlah hari yang setara sebelum dikalikan,
+    // supaya hasilnya benar-benar berubah sesuai satuan yang dipilih.
+    var daysPerUnit = uangPeriod === 'hari' ? 1 : (uangPeriod === 'bulan' ? 30 : 365);
+    var unitLabel = uangPeriod === 'hari' ? 'Hari' : (uangPeriod === 'bulan' ? 'Bulan' : 'Tahun');
+    var totalHari = berapa * daysPerUnit;
+    var hasil = amount * totalHari;
+    document.getElementById('uangHasilLabel').textContent = 'Uang \u00D7 ' + berapa + ' ' + unitLabel + ' (' + totalHari + ' hari)';
+    document.getElementById('uangHasilVal').textContent = formatRupiah(hasil);
+  }
+
+  function initUang(){
+    document.getElementById('uangAmount').addEventListener('input', uangRecalculate);
+    document.getElementById('uangBerapa').addEventListener('input', uangRecalculate);
+    document.querySelectorAll('.uang-period-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        uangPeriod = btn.dataset.period;
+        document.querySelectorAll('.uang-period-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+        uangRecalculate();
+      });
+    });
+    uangRecalculate();
+    return true;
+  }
+
+  /* @@DEV_SECTION_END@@ */
 
   /* =========================================================
      BAGIAN 9 — UNO FLIP (2 sisi kartu: Terang & Gelap), 2-5 pemain lokal
