@@ -746,7 +746,6 @@
         <div class="auth-status" id="loginStatus">&nbsp;</div>
       </div>
       <div class="auth-switch">Belum punya akun? <a id="goToRegister" href="javascript:void(0)">Daftar Akun</a></div>
-      <div class="auth-switch"><a href="https://zul1-reiga-uni.github.io/ReigaX/akunrg.html" target="_blank" rel="noopener">Kelola Akun Online &#8599;</a></div>
     </div>
   </div>
 
@@ -890,7 +889,6 @@
   var CIRC = 339.292;
   var totalSteps = 0;
   var doneSteps = 0;
-  var developerModePending = false;
 
   function setProgress(){
     var pct = totalSteps ? Math.round((doneSteps/totalSteps)*100) : 0;
@@ -1138,12 +1136,7 @@
   continueBtn.addEventListener('click', function(){
     if(!continueBtn.classList.contains('show')) return;
     loadingEl.classList.add('hide');
-    if(developerModePending){
-      developerModePending = false;
-      showScreen('developer');
-    } else {
-      showScreen('login');
-    }
+    showScreen('login');
     setTimeout(function(){ loadingEl.style.display='none'; }, 550);
   });
 
@@ -1197,12 +1190,6 @@
     document.querySelectorAll('.key.op').forEach(function(b){ b.classList.remove('active'); });
     if(calcState.tokens.length===0) return;
     var full = calcState.tokens.concat([calcState.current]);
-    var secretAttempt = full.join('').replace(/\s+/g,'');
-    if(secretAttempt===DEV_CODE){
-      clearAll();
-      activateDeveloperMode();
-      return;
-    }
     var expr = [];
     for(var i=0;i<full.length;i++){ expr.push(i%2===0 ? parseFloat(full[i]) : full[i]); }
     var result;
@@ -3998,10 +3985,9 @@
 
   /* =========================================================
      BAGIAN 8C — MODE DEVELOPER
-     Kode rahasia kalkulator: 1236745 + 5
+     Diakses lewat menu "Mode Developer" di Home, hanya muncul untuk akun admin.
   ========================================================= */
   /* @@DEV_SECTION_START@@ */
-  var DEV_CODE = '1236745+5';
   var developerDefaultCode =
     "/* Script runtime Reiga Universal */\n" +
     "// Contoh API yang bisa dipakai:\n" +
@@ -4120,31 +4106,37 @@
     return true;
   }
   function activateDeveloperMode(){
-    document.title = 'DEVELOPER — Reiga Universal';
-    var brandName = document.querySelector('.brand-name');
-    var brandSub = document.querySelector('.brand-sub');
-    if(brandName) brandName.textContent = 'DEVELOPER';
-    if(brandSub) brandSub.textContent = 'You Are Developer';
-    if(loadingEl){
-      developerModePending = true;
-      loadingEl.style.display = 'flex';
-      loadingEl.classList.remove('hide');
-      percentEl.textContent = '100%';
-      barEl.style.width = '100%';
-      ringEl.style.strokeDashoffset = '0';
-      statusEl.textContent = 'Mode developer aktif';
-      continueBtn.textContent = 'Masuk Mode Developer';
-      continueBtn.classList.add('show');
-    }
-    buildDeveloperList();
+    showScreen('developer');
   }
 
   /* =========================================================
      BAGIAN 8D — SISTEM AKUN (Login / Daftar) + tampilan di Developer Mode
-     Semua akun disimpan bersama di satu array in-memory ("1 folder"),
-     dan bisa dilihat lewat menu "User Account" di Mode Developer.
+     Semua akun disimpan bersama di satu array, dipersist ke localStorage
+     supaya tidak hilang saat aplikasi direfresh/ditutup.
   ========================================================= */
-  var accountsFolder = []; // { username, password }
+  var accountsFolder = []; // { username, password, createdAt } - dipersist ke localStorage
+  var currentUser = null;
+  var isAdminUser = false;
+  var ACCOUNTS_STORAGE_KEY = 'reiga_local_accounts';
+
+  function loadAccountsFromStorage(){
+    try{
+      var raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      if(!Array.isArray(list)) list = [];
+      return list;
+    } catch(e){ return []; }
+  }
+  function saveAccountsToStorage(){
+    try{ localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accountsFolder)); } catch(e){}
+  }
+  function ensureAdminAccount(){
+    var hasAdmin = accountsFolder.filter(function(a){ return a.username === 'Kyro'; })[0];
+    if(!hasAdmin){
+      accountsFolder.push({username:'Kyro', password:'Kyro', createdAt: new Date().toISOString()});
+      saveAccountsToStorage();
+    }
+  }
 
   var BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   function formatTanggalAkun(iso){
@@ -4182,6 +4174,25 @@
     el.className = 'auth-status' + (kind ? ' ' + kind : '');
   }
 
+  // Menambahkan 1 baris menu "Mode Developer" ke Home List, hanya dipanggil
+  // saat yang login adalah akun admin (Kyro). Tidak muncul untuk akun lain.
+  function addDeveloperHomeMenuItem(){
+    var homeList = document.getElementById('homeList');
+    if(!homeList) return;
+    if(homeList.querySelector('[data-go="developer"]')) return; // sudah ada
+    var num = homeList.querySelectorAll('.menu-item').length + 1;
+    var row = document.createElement('div');
+    row.className = 'menu-item';
+    row.dataset.go = 'developer';
+    row.innerHTML =
+      '<div class="menu-num">' + String(num).padStart(2,'0') + '</div>' +
+      '<div class="menu-icon">🛠️</div>' +
+      '<div class="menu-text"><div class="menu-title">Mode Developer</div><div class="menu-sub">Khusus akun admin</div></div>' +
+      '<div class="menu-chevron">&#8250;</div>';
+    row.addEventListener('click', function(){ showScreen('developer'); });
+    homeList.appendChild(row);
+  }
+
   function doLogin(){
     var u = document.getElementById('loginUsername').value.trim();
     var p = document.getElementById('loginPassword').value;
@@ -4194,6 +4205,9 @@
       authSetStatus('loginStatus', 'Username atau password salah.', 'error');
       return;
     }
+    currentUser = found.username;
+    isAdminUser = (found.username === 'Kyro');
+    if(isAdminUser) addDeveloperHomeMenuItem();
     authSetStatus('loginStatus', 'Login berhasil! Halo, ' + u + '.', 'success');
     setTimeout(function(){ showScreen('home'); }, 500);
   }
@@ -4230,6 +4244,7 @@
     }
     var newAccount = {username:u, password:p, createdAt: new Date().toISOString()};
     accountsFolder.push(newAccount);
+    saveAccountsToStorage();
     syncAccountToAkunrg(newAccount);
     renderDevAccounts();
     authSetStatus('registerStatus', 'Akun tersimpan! Mengarahkan ke Login...', 'success');
@@ -4239,6 +4254,8 @@
   }
 
   function initAuth(){
+    accountsFolder = loadAccountsFromStorage();
+    ensureAdminAccount();
     document.getElementById('loginSubmit').addEventListener('click', doLogin);
     document.getElementById('registerSubmit').addEventListener('click', doRegister);
     document.getElementById('goToRegister').addEventListener('click', function(){ showScreen('register'); });
